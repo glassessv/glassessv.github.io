@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Shop — Accesorios Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #080808;
+            --dark: #111111;
+            --card: #141414;
+            --border: #1f1f1f;
+            --border-light: #2a2a2a;
+            --text: #ffffff;
+            --muted: #888888;
+            --subtle: #444444;
+            --accent: #c9a96e;
+            --wa: #25D366;
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --sans: 'Inter', sans-serif;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAV ─────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 0 32px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8,8,8,0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+        }
+
+        nav.scrolled {
+            background: rgba(8,8,8,0.92);
+            border-color: var(--border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .nav-logo-text {
+            font-family: var(--serif);
+            font-size: 1.3em;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text);
+            font-style: italic;
+        }
+
+        .nav-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            font-size: 0.72em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s var(--ease);
+        }
+
+        .nav-wa:hover {
+            border-color: var(--wa);
+            color: var(--wa);
+        }
+
+        .nav-wa svg { flex-shrink: 0; }
+
+        /* ─── HERO ────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 32px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border: 1px solid rgba(201,169,110,0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-line-2 {
+            width: 900px;
+            height: 900px;
+            border-color: rgba(201,169,110,0.03);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.68em;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease) 0.2s forwards;
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: clamp(3em, 8vw, 5.5em);
+            font-weight: 300;
+            line-height: 1.08;
+            letter-spacing: 1px;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease) 0.4s forwards;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: 0.95em;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease) 0.6s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease) 0.8s forwards;
+        }
+
+        .btn-primary {
+            padding: 14px 36px;
+            background: var(--text);
+            color: var(--black);
+            border: none;
+            border-radius: 3px;
+            font-size: 0.75em;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s var(--ease);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            color: var(--black);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            padding: 14px 36px;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border-light);
+            border-radius: 3px;
+            font-size: 0.75em;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s var(--ease) 1.4s forwards;
+        }
+
+        .hero-scroll span {
+            font-size: 0.6em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--subtle);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--subtle), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        /* ─── BADGES ──────────────────────────── */
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .badges::-webkit-scrollbar { display: none; }
+
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 32px;
+            border-right: 1px solid var(--border);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .badge-item:last-child { border-right: none; }
+
+        .badge-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .badge-text {
+            font-size: 0.7em;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* ─── SECTION ─────────────────────────── */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 64px;
+            gap: 24px;
+        }
+
+        .section-label {
+            font-size: 0.65em;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(2em, 4vw, 3em);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.1;
+        }
+
+        .section-sub {
+            font-size: 0.82em;
+            color: var(--muted);
+            font-weight: 300;
+            max-width: 340px;
+            text-align: right;
+            line-height: 1.7;
+        }
+
+        /* ─── CATEGORIES ──────────────────────── */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
+        }
+
+        .cat-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            background: var(--dark);
+            aspect-ratio: 4/5;
+        }
+
+        .cat-card:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .cat-card:nth-child(2) {
+            border-radius: 0 12px 0 0;
+        }
+
+        .cat-card:nth-child(3) {
+            border-radius: 0 0 0 12px;
+        }
+
+        .cat-card:last-child {
+            border-radius: 0 0 12px 0;
+        }
+
+        .cat-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s var(--ease);
+            opacity: 0.85;
+        }
+
+        .cat-card:hover img {
+            transform: scale(1.06);
+            opacity: 1;
+        }
+
+        .cat-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,
+                rgba(0,0,0,0.85) 0%,
+                rgba(0,0,0,0.2) 45%,
+                transparent 100%);
+            transition: background 0.4s var(--ease);
+        }
+
+        .cat-card:hover .cat-overlay {
+            background: linear-gradient(to top,
+                rgba(0,0,0,0.9) 0%,
+                rgba(0,0,0,0.3) 50%,
+                transparent 100%);
+        }
+
+        .cat-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 28px 24px;
+            transform: translateY(6px);
+            transition: transform 0.4s var(--ease);
+        }
+
+        .cat-card:hover .cat-content {
+            transform: translateY(0);
+        }
+
+        .cat-name {
+            font-family: var(--serif);
+            font-size: 1.6em;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .cat-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.65em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: opacity 0.3s var(--ease) 0.05s, transform 0.3s var(--ease) 0.05s;
+        }
+
+        .cat-card:hover .cat-cta {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .cat-cta::after {
+            content: '→';
+            transition: transform 0.3s var(--ease);
+        }
+
+        .cat-card:hover .cat-cta::after {
+            transform: translateX(4px);
+        }
+
+        /* ─── FOOTER ──────────────────────────── */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid var(--border);
+            padding: 80px 32px 40px;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 60px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .footer-brand img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand-name {
+            font-family: var(--serif);
+            font-size: 1.4em;
+            font-style: italic;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand-desc {
+            font-size: 0.82em;
+            color: var(--muted);
+            line-height: 1.8;
+            font-weight: 300;
+            max-width: 260px;
+        }
+
+        .footer-col-title {
+            font-size: 0.65em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--subtle);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .footer-col p {
+            font-size: 0.82em;
+            color: var(--muted);
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        .footer-wa-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--wa);
+            text-decoration: none;
+            font-size: 0.88em;
+            font-weight: 500;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-wa-link:hover { opacity: 0.8; }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-copy {
+            font-size: 0.72em;
+            color: var(--subtle);
+            letter-spacing: 1px;
+        }
+
+        .footer-tag {
+            font-size: 0.65em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--subtle);
+        }
+
+        /* ─── ANIMATIONS ──────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ──────────────────────── */
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; height: 64px; }
+            .nav-logo-text { font-size: 1.1em; }
+            .nav-wa span { display: none; }
+            .nav-wa { padding: 8px 14px; }
+            .hero { padding: 100px 24px 70px; }
+            .section { padding: 70px 20px; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .section-sub { text-align: left; }
+            .badges { justify-content: flex-start; }
+            .badge-item { padding: 16px 24px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.6em; }
+            .cat-grid { gap: 2px; }
+            .cat-name { font-size: 1.2em; }
+            .cat-content { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <a class="nav-logo" href="index.html">
+            <img src="logo.jpeg" alt="Easy Shop">
+            <span class="nav-logo-text">Easy Shop</span>
+        </a>
+        <a class="nav-wa" href="https://wa.me/50368211667" target="_blank">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.52 3.48A11.84 11.84 0 0 0 12.07 0C5.5 0 .15 5.34.15 11.92c0 2.1.55 4.16 1.6 5.97L0 24l6.28-1.64a11.89 11.89 0 0 0 5.79 1.48h.01c6.57 0 11.92-5.35 11.92-11.92 0-3.18-1.24-6.16-3.48-8.44z"/>
+            </svg>
+            <span>Contactar</span>
+        </a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-line"></div>
+        <div class="hero-line hero-line-2"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">Easy Shop</p>
+            <h1 class="hero-title">Accesorios que<br><em>elevan tu estilo</em></h1>
+            <p class="hero-sub">Selección exclusiva de lentes, cinturones y billeteras de las marcas más reconocidas del mundo. Calidad AAA, entrega directa.</p>
+            <div class="hero-actions">
+                <a href="#colecciones" class="btn-primary">Explorar Colecciones</a>
+                <a href="https://wa.me/50368211667" target="_blank" class="btn-ghost">Contactar</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- BADGES -->
+    <div class="badges">
+        <div class="badge-item">
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="badge-text">Calidad AAA</span>
+        </div>
+        <div class="badge-item">
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+            </svg>
+            <span class="badge-text">100% Original</span>
+        </div>
+        <div class="badge-item">
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/>
+            </svg>
+            <span class="badge-text">Envío Disponible</span>
+        </div>
+        <div class="badge-item">
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+            </svg>
+            <span class="badge-text">Atención Personalizada</span>
+        </div>
+    </div>
+
+    <!-- COLECCIONES -->
+    <section class="section" id="colecciones">
+        <div class="section-header fade-in">
+            <div>
+                <p class="section-label">Nuestras Colecciones</p>
+                <h2 class="section-title">Elige tu<br>categoría</h2>
+            </div>
+            <p class="section-sub">Cada pieza seleccionada por calidad y estilo. Contáctanos para consultar disponibilidad.</p>
+        </div>
+
+        <div class="cat-grid fade-in">
+            <a class="cat-card" href="lentes.html">
+                <img src="Lentes.jpg" alt="Lentes" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-content">
+                    <div class="cat-name">Lentes</div>
+                    <div class="cat-cta">Ver colección</div>
+                </div>
+            </a>
+            <a class="cat-card" href="cinturones.html">
+                <img src="Cinturones.jpg" alt="Cinturones" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-content">
+                    <div class="cat-name">Cinturones</div>
+                    <div class="cat-cta">Ver colección</div>
+                </div>
+            </a>
+            <a class="cat-card" href="billeteras-hombre.html">
+                <img src="Billeteras para hombre.jpg" alt="Billeteras Hombre" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-content">
+                    <div class="cat-name">Billeteras<br>Hombre</div>
+                    <div class="cat-cta">Ver colección</div>
+                </div>
+            </a>
+            <a class="cat-card" href="billeteras-mujer.html">
+                <img src="Billeteras para mujer.jpg" alt="Billeteras Mujer" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-content">
+                    <div class="cat-name">Billeteras<br>Mujer</div>
+                    <div class="cat-cta">Ver colección</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand fade-in">
+                <img src="logo.jpeg" alt="Easy Shop">
+                <div class="footer-brand-name">Easy Shop</div>
+                <p class="footer-brand-desc">Accesorios premium seleccionados con criterio. Lentes, cinturones y billeteras de las marcas más reconocidas, al alcance de tu mano.</p>
+            </div>
+            <div class="footer-col fade-in">
+                <p class="footer-col-title">Contacto</p>
+                <p>Atención por WhatsApp<br>disponible todos los días.</p>
+                <a class="footer-wa-link" href="https://wa.me/50368211667" target="_blank">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.52 3.48A11.84 11.84 0 0 0 12.07 0C5.5 0 .15 5.34.15 11.92c0 2.1.55 4.16 1.6 5.97L0 24l6.28-1.64a11.89 11.89 0 0 0 5.79 1.48h.01c6.57 0 11.92-5.35 11.92-11.92 0-3.18-1.24-6.16-3.48-8.44z"/>
+                    </svg>
+                    +503 6821 1667
+                </a>
+            </div>
+            <div class="footer-col fade-in">
+                <p class="footer-col-title">Información</p>
+                <p>Envíos disponibles a nivel nacional. Consulta costos y tiempos de entrega por WhatsApp.<br><br></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copy">© 2024 Easy Shop. Todos los derechos reservados.</p>
+            <p class="footer-tag">Accesorios Premium</p>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+        }, { passive: true });
+
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
